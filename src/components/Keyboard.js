@@ -1,9 +1,14 @@
 import '../styles/keyboard.css';
+import { useSelector, useDispatch } from 'react-redux'
+import { addLetter } from '../features/keyboardReducer'
 const deleteStyle = {
   'width': '20px',
   'height': '30px'
 }
 function Keyboard() {
+  const keyboardState = useSelector(state => state.keyboardData.pushedLetter)
+  console.log(keyboardState);
+  const dispatch = useDispatch();
   return (
     <div className="keyboard">
       <div className="keyboard-line">
