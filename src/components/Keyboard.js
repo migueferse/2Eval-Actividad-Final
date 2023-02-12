@@ -12,7 +12,7 @@ function Keyboard() {
   return (
     <div className="keyboard">
       <div className="keyboard-line">
-        <div className="key ">Q</div>
+        <div className="key " onClick={() => dispatch(addLetter())}>Q</div>
         <div className="key ">W</div>
         <div className="key ">E</div>
         <div className="key yellow">R</div>

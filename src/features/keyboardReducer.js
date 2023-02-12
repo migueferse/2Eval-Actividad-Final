@@ -5,7 +5,8 @@ const initialState = {
 
 }
 
-function addLetter(state, action) {
+function addLetterReducer(state, action) {
+  console.log('state', state);
   state
 }
 
@@ -13,7 +14,7 @@ const keyboardSlice = createSlice({
   name: 'keyboard',
   initialState,
   reducers: {
-    addLetter:addLetter
+    addLetter:addLetterReducer
   }
 })
 
