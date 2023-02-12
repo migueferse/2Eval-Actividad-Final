@@ -1,9 +1,9 @@
-import { configureStore} from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import keyboardReducer from './keyboardReducer';
 
 export const store = configureStore({
   reducer: {
-    keyboardData: keyboardReducer,
+    game: keyboardReducer,
   },
 })
 
