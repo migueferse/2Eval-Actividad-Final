@@ -66,14 +66,62 @@ function addLetterAction(state, action) {
   }
 }
 
+function deleteLetterAction(state) {
+  const currentState = current(state);
+  const letterSelected = currentState.currentWord.selected;
+  let currentLetters = [...currentState.currentWord.letters];
+  if (currentLetters[letterSelected] !== '') {
+    currentLetters[letterSelected] = '';
+  } else if (currentLetters[letterSelected - 1] !== '') {
+    currentLetters[letterSelected - 1] = '';
+  }
+
+  let nextSelected = nextLetterSelected(currentLetters);
+
+  return {
+    ...state,
+    currentWord:
+    {
+      letters : currentLetters,
+      selected: nextSelected,
+    },
+  }
+}
+
+function checkWordIsFilled(currentLetters) {
+  let isWordFilled = true;
+  for (const letter of currentLetters) {
+    if (letter === "")
+    isWordFilled = false;
+  }
+
+  return isWordFilled;
+}
+
+function sendWordAction(state) {
+  let errorLength;
+  const currentState = current(state);
+  let currentLetters = [...currentState.currentWord.letters];
+  if (!checkWordIsFilled(currentLetters)) {
+    errorLength = 'No hay suficientes letras';
+  }
+
+  return {
+    ...state,    
+    error:errorLength,
+  }
+}
+
 const keyboardSlice = createSlice({
   name: 'keyboard',
   initialState,
   reducers: {
-    addLetter:addLetterAction,
-    selectLetter:selectLetterAction
+    addLetter: addLetterAction,
+    selectLetter: selectLetterAction,
+    deleteLetter: deleteLetterAction,
+    sendWord: sendWordAction
   }
 })
 
-export const { addLetter, selectLetter } = keyboardSlice.actions
+export const { addLetter, selectLetter, deleteLetter, sendWord } = keyboardSlice.actions
 export default keyboardSlice.reducer

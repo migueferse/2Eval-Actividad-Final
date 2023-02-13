@@ -1,13 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addLetter } from '../features/keyboardReducer';
+import { addLetter, deleteLetter, sendWord } from '../features/keyboardReducer';
 import '../styles/keyboard.css';
 const deleteStyle = {
   'width': '20px',
   'height': '30px'
 }
 function Keyboard() {
-  const keyboardState = useSelector(state => state.game.pushedLetter)
-  console.log(keyboardState);
+  const error = useSelector(state => state.game.error);
   const dispatch = useDispatch();
   return (
     <div className="keyboard">
@@ -36,7 +35,7 @@ function Keyboard() {
         <div className="key " onClick={() => dispatch(addLetter('Ñ'))}>Ñ</div>
       </div>
       <div className="keyboard-line">
-        <div className="command">↵</div>
+        <div className="command" onClick={() => dispatch(sendWord())}>↵</div>
         <div className="key " onClick={() => dispatch(addLetter('Z'))}>Z</div>
         <div className="key " onClick={() => dispatch(addLetter('X'))}>X</div>
         <div className="key " onClick={() => dispatch(addLetter('C'))}>C</div>
@@ -45,14 +44,20 @@ function Keyboard() {
         <div className="key " onClick={() => dispatch(addLetter('N'))}>N</div>
         <div className="key " onClick={() => dispatch(addLetter('M'))}>M</div>
         <div className="command"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor" aria-hidden="true" style={deleteStyle}>
+          stroke="currentColor" aria-hidden="true" style={deleteStyle}  onClick={() => dispatch(deleteLetter())}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
             d="M12 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2M3 12l6.414 6.414a2 2 0 001.414.586H19a2 2 0 002-2V7a2 2 0 00-2-2h-8.172a2 2 0 00-1.414.586L3 12z">
           </path>
         </svg></div>
       </div>
+      <div className="error">
+          <div className={error !== "" ? "overlay": ""}></div>
+          <div>
+            <p>{error}</p>
+          </div>
+        </div>
     </div>
   )
 }
-
+// {`slot ${selectedLetter === 0 ? 'selected' : null}`}
 export default Keyboard
