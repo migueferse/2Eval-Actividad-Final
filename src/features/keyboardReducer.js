@@ -8,8 +8,8 @@ const initialState = {
     error: ''
   },
   currentWord:{
-    letters: [],
-    colors: [],
+    letters: ['','','','',''],
+    colors: ['','','','',''],
     selected: 0
   },
   previousWords: null,
@@ -20,16 +20,48 @@ const initialState = {
   },
 }
 
-function addLetterReducer(state, action) {
-  console.log('state', current(state));
+function selectLetterAction(state, action) {
   const currentState = current(state);
+  let currentLetters = [...currentState.currentWord.letters];
+  return {
+    ...state,
+    currentWord:
+    {
+      letters : currentLetters,
+      selected: action.payload,
+    },
+  }
+}
+
+function checkWordLenght(wordLength) {
+  let isCorrectLength = (wordLength === 5) ? true : false;
+    return isCorrectLength;  
+}
+
+function nextLetterSelected(currentLetters) {
+  for (let i = 0; i < currentLetters.length; i++) {
+    const letter = currentLetters[i];
+    if (letter === '') {
+      return i;      
+    }
+  }
+}
+
+function addLetterAction(state, action) {
+  const currentState = current(state);
+  const currentLetter = action.payload
+  let currentLetters = [...currentState.currentWord.letters];
+  currentLetters[currentState.currentWord.selected] = currentLetter;
+
+  if (checkWordLenght(currentState.currentWord.selected)) { return };
+  let nextSelected = nextLetterSelected(currentLetters); 
 
   return {
     ...state,
     currentWord:
     {
-      letters : [action.payload],
-      selected: currentState.currentWord.selected + 1,
+      letters : currentLetters,
+      selected: nextSelected,
     },
   }
 }
@@ -38,9 +70,10 @@ const keyboardSlice = createSlice({
   name: 'keyboard',
   initialState,
   reducers: {
-    addLetter:addLetterReducer
+    addLetter:addLetterAction,
+    selectLetter:selectLetterAction
   }
 })
 
-export const { addLetter } = keyboardSlice.actions
+export const { addLetter, selectLetter } = keyboardSlice.actions
 export default keyboardSlice.reducer

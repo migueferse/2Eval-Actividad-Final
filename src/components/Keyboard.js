@@ -15,35 +15,35 @@ function Keyboard() {
         <div className="key " onClick={() => dispatch(addLetter('Q'))}>Q</div>
         <div className="key " onClick={() => dispatch(addLetter('W'))}>W</div>
         <div className="key " onClick={() => dispatch(addLetter('E'))}>E</div>
-        <div className="key yellow">R</div>
-        <div className="key ">T</div>
-        <div className="key ">Y</div>
-        <div className="key ">U</div>
-        <div className="key grey">I</div>
-        <div className="key ">O</div>
-        <div className="key ">P</div>
+        <div className="key " onClick={() => dispatch(addLetter('R'))}>R</div>
+        <div className="key " onClick={() => dispatch(addLetter('T'))}>T</div>
+        <div className="key " onClick={() => dispatch(addLetter('Y'))}>Y</div>
+        <div className="key " onClick={() => dispatch(addLetter('U'))}>U</div>
+        <div className="key " onClick={() => dispatch(addLetter('I'))}>I</div>
+        <div className="key " onClick={() => dispatch(addLetter('O'))}>O</div>
+        <div className="key " onClick={() => dispatch(addLetter('P'))}>P</div>
       </div>
       <div className="keyboard-line">
-        <div className="key green">A</div>
-        <div className="key ">S</div>
-        <div className="key ">D</div>
-        <div className="key ">F</div>
-        <div className="key ">G</div>
-        <div className="key ">H</div>
-        <div className="key ">J</div>
-        <div className="key ">K</div>
-        <div className="key ">L</div>
-        <div className="key ">Ñ</div>
+        <div className="key " onClick={() => dispatch(addLetter('A'))}>A</div>
+        <div className="key " onClick={() => dispatch(addLetter('S'))}>S</div>
+        <div className="key " onClick={() => dispatch(addLetter('D'))}>D</div>
+        <div className="key " onClick={() => dispatch(addLetter('F'))}>F</div>
+        <div className="key " onClick={() => dispatch(addLetter('G'))}>G</div>
+        <div className="key " onClick={() => dispatch(addLetter('H'))}>H</div>
+        <div className="key " onClick={() => dispatch(addLetter('J'))}>J</div>
+        <div className="key " onClick={() => dispatch(addLetter('K'))}>K</div>
+        <div className="key " onClick={() => dispatch(addLetter('L'))}>L</div>
+        <div className="key " onClick={() => dispatch(addLetter('Ñ'))}>Ñ</div>
       </div>
       <div className="keyboard-line">
         <div className="command">↵</div>
-        <div className="key ">Z</div>
-        <div className="key ">X</div>
-        <div className="key ">C</div>
-        <div className="key ">V</div>
-        <div className="key grey">B</div>
-        <div className="key ">N</div>
-        <div className="key ">M</div>
+        <div className="key " onClick={() => dispatch(addLetter('Z'))}>Z</div>
+        <div className="key " onClick={() => dispatch(addLetter('X'))}>X</div>
+        <div className="key " onClick={() => dispatch(addLetter('C'))}>C</div>
+        <div className="key " onClick={() => dispatch(addLetter('V'))}>V</div>
+        <div className="key " onClick={() => dispatch(addLetter('B'))}>B</div>
+        <div className="key " onClick={() => dispatch(addLetter('N'))}>N</div>
+        <div className="key " onClick={() => dispatch(addLetter('M'))}>M</div>
         <div className="command"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke="currentColor" aria-hidden="true" style={deleteStyle}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
