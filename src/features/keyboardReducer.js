@@ -24,11 +24,13 @@ const initialState = {
 function selectLetterAction(state, action) {
   const currentState = current(state);
   let currentLetters = [...currentState.currentWord.letters];
+  let currentColors = [...currentState.currentWord.colors];
   return {
     ...state,
     currentWord:
     {
       letters : currentLetters,
+      colors: currentColors,
       selected: action.payload,
     },
   }
@@ -73,6 +75,7 @@ function deleteLetterAction(state) {
   const currentState = current(state);
   const letterSelected = currentState.currentWord.selected;
   let currentLetters = [...currentState.currentWord.letters];
+  let currentColors = [...currentState.currentWord.colors];
   if (currentLetters[letterSelected] !== '') {
     currentLetters[letterSelected] = '';
   } else if (currentLetters[letterSelected - 1] !== '') {
@@ -86,6 +89,7 @@ function deleteLetterAction(state) {
     currentWord:
     {
       letters : currentLetters,
+      colors: currentColors,
       selected: nextSelected,
     },
   }
