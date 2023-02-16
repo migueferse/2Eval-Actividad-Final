@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addLetter, deleteLetter, sendWord } from '../features/keyboardReducer';
+import { addLetter, deleteLetter } from '../features/keyboardReducer';
+import { checkWordFetch } from '../features/thunks';
 import '../styles/keyboard.css';
 const deleteStyle = {
   'width': '20px',
@@ -7,6 +8,9 @@ const deleteStyle = {
 }
 function Keyboard() {
   const error = useSelector(state => state.game.error);
+  const currentLetters = useSelector(state => state.game.currentWord.letters);
+  const gameId = useSelector(state => state.game.game.id);
+  console.log('Component',currentLetters);
   const dispatch = useDispatch();
   return (
     <div className="keyboard">
@@ -35,7 +39,7 @@ function Keyboard() {
         <div className="key " onClick={() => dispatch(addLetter('Ñ'))}>Ñ</div>
       </div>
       <div className="keyboard-line">
-        <div className="command" onClick={() => dispatch(sendWord())}>↵</div>
+        <div className="command" onClick={() => dispatch(checkWordFetch({currentLetters, gameId}))}>↵</div>
         <div className="key " onClick={() => dispatch(addLetter('Z'))}>Z</div>
         <div className="key " onClick={() => dispatch(addLetter('X'))}>X</div>
         <div className="key " onClick={() => dispatch(addLetter('C'))}>C</div>

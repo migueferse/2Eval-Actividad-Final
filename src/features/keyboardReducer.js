@@ -1,8 +1,9 @@
 import { createSlice, current } from '@reduxjs/toolkit';
+import { newGameFetch, checkWordFetch } from './thunks';
 
 const initialState = {
   game: {
-    id: '',
+    id: null,
     win: false,
     lost: false,
     error: ''
@@ -12,11 +13,11 @@ const initialState = {
     colors: ['','','','',''],
     selected: 0
   },
-  previousWords: null,
+  previousWords: [],
   error: '',
-  loading: true,
+  loading: false,
   keyboard: {
-    colors: null
+    colors: {}
   },
 }
 
@@ -51,6 +52,7 @@ function addLetterAction(state, action) {
   const currentState = current(state);
   const currentLetter = action.payload
   let currentLetters = [...currentState.currentWord.letters];
+  let currentColors = [...currentState.currentWord.colors];
   currentLetters[currentState.currentWord.selected] = currentLetter;
 
   if (checkWordLenght(currentState.currentWord.selected)) { return };
@@ -60,7 +62,8 @@ function addLetterAction(state, action) {
     ...state,
     currentWord:
     {
-      letters : currentLetters,
+      letters: currentLetters,
+      colors: currentColors,
       selected: nextSelected,
     },
   }
@@ -98,18 +101,74 @@ function checkWordIsFilled(currentLetters) {
   return isWordFilled;
 }
 
-function sendWordAction(state) {
-  let errorLength;
+function sendWordAction(state, action) {
+  // let errorLength;
+  // const currentState = current(state);
+  // let currentLetters = [...currentState.currentWord.letters];
+  // if (!checkWordIsFilled(currentLetters)) {
+  //   errorLength = 'No hay suficientes letras';
+  // }
+  // console.log('state', state);
+  // console.log('action', action);
+
+  // return {
+  //   ...state,    
+  //   error:errorLength,
+  // }
+}
+
+function newGamePending(state) {
+  console.log('newGamePending');  
+}
+
+function newGameFulFilled(state, action) {
+  console.log('newGameFulFilled');
+  return {
+    ...state,
+    game: {
+       id : action.payload,
+       win: state.game.win,
+      lost: state.game.lost,
+      error: state.game.error
+    }
+  }
+}
+
+function newGameRejected(state, action) {
+  console.log('newGameRejected');
+  console.log('Error', action.error.message);
+  return {
+    ...state,
+    game: {
+      id: state.game.id,
+      win: state.game.win,
+      lost: state.game.lost,
+      error: action.error.message
+    },
+  }
+}
+
+function checkWordPending(state) {
+  console.log('chekWordPending');
+}
+
+function checkWordFulFilled(state, action) {
+  console.log('checkWordFulFilled');
+}
+
+function checkWordRejected(state, action) {
   const currentState = current(state);
   let currentLetters = [...currentState.currentWord.letters];
-  if (!checkWordIsFilled(currentLetters)) {
-    errorLength = 'No hay suficientes letras';
-  }
-
+  let currentColors = [...currentState.currentWord.colors];
   return {
-    ...state,    
-    error:errorLength,
-  }
+      ...state,    
+      currentWord:{
+        letters: currentLetters,
+        colors: currentColors,
+        selected: null
+      },
+      error:action.error.message,
+    }
 }
 
 const keyboardSlice = createSlice({
@@ -119,9 +178,17 @@ const keyboardSlice = createSlice({
     addLetter: addLetterAction,
     selectLetter: selectLetterAction,
     deleteLetter: deleteLetterAction,
-    sendWord: sendWordAction
+    // sendWord: sendWordAction
+  },
+  extraReducers: {
+    [newGameFetch.pending]: newGamePending,
+    [newGameFetch.fulfilled]: newGameFulFilled,
+    [newGameFetch.rejected]: newGameRejected,
+    [checkWordFetch.pending]: checkWordPending,
+    [checkWordFetch.fulfilled]: checkWordFulFilled,
+    [checkWordFetch.rejected]: checkWordRejected,
   }
 })
 
-export const { addLetter, selectLetter, deleteLetter, sendWord } = keyboardSlice.actions
+export const { addLetter, selectLetter, deleteLetter } = keyboardSlice.actions
 export default keyboardSlice.reducer
