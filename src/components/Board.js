@@ -1,8 +1,9 @@
-import Keyboard from './Keyboard';
+import ErrorGame from './ErrorGame';
 import Words from './Words';
+import Keyboard from './Keyboard';
+import Error from './Error';
 import { useDispatch } from 'react-redux';
 import { newGameFetch } from '../features/thunks';
-import ErrorGame from './ErrorGame';
 
 function Board() {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ function Board() {
       <ErrorGame />
       <Words />
       <Keyboard />
+      <Error />
   </div>
   )
 }

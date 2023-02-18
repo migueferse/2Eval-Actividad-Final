@@ -11,6 +11,7 @@ async function getNewGameId() {
     let response = await fetch(URLNEW,options);
     if (response.status !== 200) {throw 'Error Initializing game 404'}
     let data = await response.json();
+    console.log('Id partida', data.id);
     return data.id;
   } catch (error) {
     throw error;
@@ -27,42 +28,49 @@ function checkWordIsFilled(letters) {
   return isWordFilled;
 }
 
-async function getLettersPosition(gameData) {
-  var data = {
-    'position': '0',
-    'letter': 'a'
-  }
-
-  var URLCOLOUR = URL + '/guess/'+ gameData.gameId;
-  var options = {
+async function fetchLettersPosition(gameId, data) {
+  let URLCOLOUR = URL + '/guess/'+ gameId;
+  let options = {
     method: "POST",
     headers: {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(data)
   }
-
-
+  
   try {
     let response = await fetch(URLCOLOUR, options);
     let data = await response.json();
-    console.log(data);
     return data
   } catch (error) {
     throw error;
   }
+
 }
 
-// async function getNamesUnsorted(movementsUrl) {
-//   try {
-//     let arrayNames = await Promise.all(
-//       movementsUrl.map(async (url) => {return await getSpanishName(url)})    
-//     )
-//     return arrayNames;    
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
+async function getLettersPosition(gameData) {
+  let letters = gameData.currentLetters;
+  
+  // let data = {
+  //   'position': '0',
+  //   'letter': 'a'
+  // }
+
+
+  let lettersData = letters.map(function(letter, index) {
+    return { position: index.toString(), letter: letter };
+  });  
+
+  try {
+        let lettersPosition = await Promise.all(
+          lettersData.map(async (letterData) => {return await fetchLettersPosition(gameData.gameId, letterData)})    
+        )
+        
+        return lettersPosition;    
+      } catch (error) {
+        throw error;
+      }
+}
 
 async function checkWord(gameData) {
   console.log('Id',gameData.gameId);
@@ -84,7 +92,7 @@ async function checkWord(gameData) {
     if (data.valid === false) {
       throw ('La palabra no está en la lista');
     } else {
-      getLettersPosition(gameData);
+      return getLettersPosition(gameData);
     }
 
 

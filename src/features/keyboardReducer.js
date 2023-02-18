@@ -121,6 +121,38 @@ function sendWordAction(state, action) {
   // }
 }
 
+function changeLettersPositionToColor(lettersPosition) {
+  // let lettersPosition = [
+  //   { status: 'in word' },
+  //   { status: 'wrong' },
+  //   { status: 'in position' },
+  //   { status: 'wrong' },
+  //   { status: 'in word' }
+  // ];
+  
+  let lettersColors = lettersPosition.map(function(item) {
+    switch (item.status) {
+      case 'in position':
+        return 'green';
+      case 'in word':
+        return 'yellow';
+      default:
+        return 'grey';
+    }
+  });
+
+  return lettersColors
+}
+
+function getKeyboardColors(letters, colors) {
+  const keyboardColors = letters.reduce((acc, letter, index) => {
+    return { ...acc, [letter]: colors[index] };
+  }, {});
+
+  return keyboardColors;
+    
+}
+
 function newGamePending(state) {
   console.log('newGamePending');  
 }
@@ -154,10 +186,37 @@ function newGameRejected(state, action) {
 
 function checkWordPending(state) {
   console.log('chekWordPending');
+  // TODO quitar el error de palabra no está en la lista, cuando cargue
 }
 
 function checkWordFulFilled(state, action) {
   console.log('checkWordFulFilled');
+  let currentWord = {};
+  const currentState = current(state);
+  let lettersColors = changeLettersPositionToColor(action.payload);
+  console.log('COLORS', lettersColors);  
+  let currentLetters = [...currentState.currentWord.letters];
+  console.log('LETTERS', currentLetters);
+  let prevWords = [...currentState.previousWords];
+  currentWord.letters = currentLetters;
+  currentWord.colors = lettersColors;
+  currentWord.selected = null
+  prevWords.push(currentWord);
+  let keyboardColors = getKeyboardColors(currentLetters, lettersColors);
+
+  return {
+    ...state,
+    currentWord:
+    {
+      letters: ['','','','',''],
+      colors: ['','','','',''],
+      selected: 0
+    },
+    previousWords : prevWords,
+    keyboard: {
+      colors: keyboardColors
+    }
+  }
 }
 
 function checkWordRejected(state, action) {

@@ -6,12 +6,13 @@ const deleteStyle = {
   'width': '20px',
   'height': '30px'
 }
+
 function Keyboard() {
-  const error = useSelector(state => state.game.error);
   const currentLetters = useSelector(state => state.game.currentWord.letters);
   const gameId = useSelector(state => state.game.game.id);
   console.log('Component',currentLetters);
   const dispatch = useDispatch();
+  
   return (
     <div className="keyboard">
       <div className="keyboard-line">
@@ -54,12 +55,6 @@ function Keyboard() {
           </path>
         </svg></div>
       </div>
-      <div className="error">
-          <div className={error !== "" ? "overlay": ""}></div>
-          <div>
-            <p>{error}</p>
-          </div>
-        </div>
     </div>
   )
 }
