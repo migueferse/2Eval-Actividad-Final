@@ -2,7 +2,7 @@ import ErrorGame from './ErrorGame';
 import Words from './Words';
 import Keyboard from './Keyboard';
 import Error from './Error';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { newGameFetch } from '../features/thunks';
 
 function Board() {

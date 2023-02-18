@@ -58,7 +58,7 @@ function addLetterAction(state, action) {
   currentLetters[state.currentWord.selected] = currentLetter;
 
   if (checkWordLenght(state.currentWord.selected)) { return };
-  let nextSelected = nextLetterSelected(currentLetters); 
+  let nextSelected = nextLetterSelected(currentLetters);
 
   return {
     ...state,
@@ -152,8 +152,98 @@ function getKeyboardColors(letters, colors) {
     
 }
 
+function  addlettersKeyboadColors(stateKeyboardColors, keyboardColors) {
+  // console.log('stateKeyboardColors', stateKeyboardColors);
+  // console.log('keyboardColors', keyboardColors)
+  // if (Object.keys(stateKeyboardColors).length === 0) {
+  //   return Object.assign({}, stateKeyboardColors, keyboardColors);    
+  // } else {
+  //   for (const key in stateKeyboardColors) {
+  //       const element = stateKeyboardColors[key];
+  //       console.log(key);  
+  //   }
+  // }
+
+  const mixKeyboardColors = (stateKeyboardColors, keyboardColors) => 
+  Object.keys({...stateKeyboardColors, ...keyboardColors}).reduce((result, key) => {
+    switch (stateKeyboardColors[key]) {
+      case 'green':
+        result[key] = 'green';
+        break;
+      case 'yellow':
+        if (keyboardColors[key] === 'green') {result[key] = 'green'; break}
+        result[key] = 'yellow';
+        break;
+      case 'grey':
+        result[key] = keyboardColors[key] || 'grey';
+        break;
+      default:
+        result[key] = keyboardColors[key];
+        break;
+    }
+    console.log('result',result);
+    return result;
+    
+    // if (stateKeyboardColors[key] === 'green') {
+    //   result[key] = 'green';
+    // } else if (stateKeyboardColors[key] === 'yellow') {
+    //   result[key] = 'yellow';
+    // } else if (stateKeyboardColors[key] === 'grey') {
+    //   result[key] = keyboardColors[key] || 'grey';
+    // } else {
+    //   result[key] = keyboardColors[key];
+    // }
+    // return result;
+  }, {});
+
+const totalKeyboardColors = mixKeyboardColors(stateKeyboardColors, keyboardColors);
+console.log(totalKeyboardColors);
+return totalKeyboardColors;
+
+
+  // let lettersColors = lettersPosition.map(function(item) {
+  //   switch (item.status) {
+  //     case 'in position':
+  //       return 'green';
+  //     case 'in word':
+  //       return 'yellow';
+  //     default:
+  //       return 'grey';
+  //   }
+  // });
+}
+
+function checkGameWin(totalKeyboardColors) {
+  let isWin = false;
+
+  for (const key in totalKeyboardColors) {
+    const letter = totalKeyboardColors[key];      
+    if (letter === 'green') {
+      return isWin = true;      
+    } else {
+      continue
+    }
+  }
+
+  return isWin
+}
+
+function checkGameLost(state) {
+  let isLost = false;
+  if (state.previousWords.length === 5) {
+    isLost = true;
+  }
+
+  return isLost;
+}
+
 function newGamePending(state) {
-  console.log('newGamePending');  
+  console.log('newGamePending');
+  return {
+    ...state,
+    loading:true
+  }
+
 }
 
 function newGameFulFilled(state, action) {
@@ -165,7 +255,8 @@ function newGameFulFilled(state, action) {
        win: state.game.win,
       lost: state.game.lost,
       error: state.game.error
-    }
+    },
+    loading:false
   }
 }
 
@@ -180,17 +271,24 @@ function newGameRejected(state, action) {
       lost: state.game.lost,
       error: action.error.message
     },
+    loading:false
   }
 }
 
 function checkWordPending(state) {
   console.log('chekWordPending');
-  // TODO quitar el error de palabra no está en la lista, cuando cargue
+  return {
+    ...state,
+    error:'',
+    loading:true
+  }
 }
 
 function checkWordFulFilled(state, action) {
   console.log('checkWordFulFilled');
+  const currentState = current(state);
   let currentWord = {};
+  let stateKbColors = {}
   let lettersColors = changeLettersPositionToColor(action.payload); 
   let currentLetters = [...state.currentWord.letters];
   let prevWords = [...state.previousWords];
@@ -198,12 +296,21 @@ function checkWordFulFilled(state, action) {
   currentWord.colors = lettersColors;
   currentWord.selected = null
   prevWords.push(currentWord);
-  let stateKeyboardColors = state.keyboard.colors;
+  let stateKeyboardColors = Object.assign(stateKbColors, state.keyboard.colors);
   let keyboardColors = getKeyboardColors(currentLetters, lettersColors);
-  let totalKeyboardColors = Object.assign({}, stateKeyboardColors, keyboardColors);
-
+  // let totalKeyboardColors = Object.assign({}, stateKeyboardColors, keyboardColors);
+  let totalKeyboardColors = addlettersKeyboadColors(stateKeyboardColors, keyboardColors);
+  let isWin = checkGameWin(totalKeyboardColors);
+  let isLost = checkGameLost(state, totalKeyboardColors);
+  // console.log('totalKeyboard', totalKeyboardColors);
   return {
     ...state,
+    game: {
+      id : state.game.id,
+      win: isWin,
+      lost: isLost,
+      error: state.game.error
+    },
     currentWord:
     {
       letters: ['','','','',''],
@@ -211,6 +318,7 @@ function checkWordFulFilled(state, action) {
       selected: 0
     },
     previousWords : prevWords,
+    loading:false,
     keyboard: {
       colors: totalKeyboardColors
     }
@@ -229,6 +337,7 @@ function checkWordRejected(state, action) {
         selected: null
       },
       error:action.error.message,
+      loading:false
     }
 }
 
