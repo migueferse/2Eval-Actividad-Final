@@ -23,8 +23,8 @@ const initialState = {
 
 function selectLetterAction(state, action) {
   const currentState = current(state);
-  let currentLetters = [...currentState.currentWord.letters];
-  let currentColors = [...currentState.currentWord.colors];
+  let currentLetters = [...state.currentWord.letters];
+  let currentColors = [...state.currentWord.colors];
   return {
     ...state,
     currentWord:
@@ -53,11 +53,11 @@ function nextLetterSelected(currentLetters) {
 function addLetterAction(state, action) {
   const currentState = current(state);
   const currentLetter = action.payload
-  let currentLetters = [...currentState.currentWord.letters];
-  let currentColors = [...currentState.currentWord.colors];
-  currentLetters[currentState.currentWord.selected] = currentLetter;
+  let currentLetters = [...state.currentWord.letters];
+  let currentColors = [...state.currentWord.colors];
+  currentLetters[state.currentWord.selected] = currentLetter;
 
-  if (checkWordLenght(currentState.currentWord.selected)) { return };
+  if (checkWordLenght(state.currentWord.selected)) { return };
   let nextSelected = nextLetterSelected(currentLetters); 
 
   return {
@@ -72,10 +72,9 @@ function addLetterAction(state, action) {
 }
 
 function deleteLetterAction(state) {
-  const currentState = current(state);
-  const letterSelected = currentState.currentWord.selected;
-  let currentLetters = [...currentState.currentWord.letters];
-  let currentColors = [...currentState.currentWord.colors];
+  const letterSelected = state.currentWord.selected;
+  let currentLetters = [...state.currentWord.letters];
+  let currentColors = [...state.currentWord.colors];
   if (currentLetters[letterSelected] !== '') {
     currentLetters[letterSelected] = '';
   } else if (currentLetters[letterSelected - 1] !== '') {
@@ -192,17 +191,16 @@ function checkWordPending(state) {
 function checkWordFulFilled(state, action) {
   console.log('checkWordFulFilled');
   let currentWord = {};
-  const currentState = current(state);
-  let lettersColors = changeLettersPositionToColor(action.payload);
-  console.log('COLORS', lettersColors);  
-  let currentLetters = [...currentState.currentWord.letters];
-  console.log('LETTERS', currentLetters);
-  let prevWords = [...currentState.previousWords];
+  let lettersColors = changeLettersPositionToColor(action.payload); 
+  let currentLetters = [...state.currentWord.letters];
+  let prevWords = [...state.previousWords];
   currentWord.letters = currentLetters;
   currentWord.colors = lettersColors;
   currentWord.selected = null
   prevWords.push(currentWord);
+  let stateKeyboardColors = state.keyboard.colors;
   let keyboardColors = getKeyboardColors(currentLetters, lettersColors);
+  let totalKeyboardColors = Object.assign({}, stateKeyboardColors, keyboardColors);
 
   return {
     ...state,
@@ -214,15 +212,15 @@ function checkWordFulFilled(state, action) {
     },
     previousWords : prevWords,
     keyboard: {
-      colors: keyboardColors
+      colors: totalKeyboardColors
     }
   }
 }
 
 function checkWordRejected(state, action) {
   const currentState = current(state);
-  let currentLetters = [...currentState.currentWord.letters];
-  let currentColors = [...currentState.currentWord.colors];
+  let currentLetters = [...state.currentWord.letters];
+  let currentColors = [...state.currentWord.colors];
   return {
       ...state,    
       currentWord:{
