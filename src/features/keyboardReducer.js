@@ -45,9 +45,12 @@ function nextLetterSelected(currentLetters) {
   for (let i = 0; i < currentLetters.length; i++) {
     const letter = currentLetters[i];
     if (letter === '') {
-      return i;      
+      return i;   
+    } else {
+      continue
     }
   }
+  return null
 }
 
 function addLetterAction(state, action) {
@@ -72,7 +75,8 @@ function addLetterAction(state, action) {
 }
 
 function deleteLetterAction(state) {
-  const letterSelected = state.currentWord.selected;
+  const lastPositionLetters = 4;
+  let letterSelected = state.currentWord.selected ? state.currentWord.selected : lastPositionLetters;
   let currentLetters = [...state.currentWord.letters];
   let currentColors = [...state.currentWord.colors];
   if (currentLetters[letterSelected] !== '') {
@@ -144,17 +148,26 @@ function changeLettersPositionToColor(lettersPosition) {
 }
 
 function getKeyboardColors(letters, colors) {
-  const keyboardColors = letters.reduce((acc, letter, index) => {
-    return { ...acc, [letter]: colors[index] };
+  const colorsPriority = {
+    green: 3,
+    yellow: 2,
+    gray: 1
+  };
+  
+  const keyboardColors = letters.reduce((obj, letter, index) => {
+    const color = colors[index];
+    if (!obj[letter] || colorsPriority[color] > colorsPriority[obj[letter]]) {
+      obj[letter] = color;
+    }
+    return obj;
   }, {});
-
-  return keyboardColors;
-    
+  
+  return keyboardColors;    
 }
 
 function  addlettersKeyboadColors(stateKeyboardColors, keyboardColors) {
-  // console.log('stateKeyboardColors', stateKeyboardColors);
-  // console.log('keyboardColors', keyboardColors)
+  console.log('stateKeyboardColors', stateKeyboardColors);
+  console.log('keyboardColors', keyboardColors)
   // if (Object.keys(stateKeyboardColors).length === 0) {
   //   return Object.assign({}, stateKeyboardColors, keyboardColors);    
   // } else {
@@ -213,19 +226,18 @@ return totalKeyboardColors;
   // });
 }
 
-function checkGameWin(totalKeyboardColors) {
-  let isWin = false;
+function checkGameWin(keyboardColors) {
 
-  for (const key in totalKeyboardColors) {
-    const letter = totalKeyboardColors[key];      
-    if (letter === 'green') {
-      return isWin = true;      
+  for (const key in keyboardColors) {
+    const letter = keyboardColors[key];      
+    if (letter !== 'green') {
+      return false;      
     } else {
       continue
     }
   }
 
-  return isWin
+  return true
 }
 
 function checkGameLost(state) {
@@ -296,11 +308,13 @@ function checkWordFulFilled(state, action) {
   currentWord.colors = lettersColors;
   currentWord.selected = null
   prevWords.push(currentWord);
+  console.log('currentLetters',currentLetters);
+  console.log('lettersColors', lettersColors);
   let stateKeyboardColors = Object.assign(stateKbColors, state.keyboard.colors);
   let keyboardColors = getKeyboardColors(currentLetters, lettersColors);
   // let totalKeyboardColors = Object.assign({}, stateKeyboardColors, keyboardColors);
   let totalKeyboardColors = addlettersKeyboadColors(stateKeyboardColors, keyboardColors);
-  let isWin = checkGameWin(totalKeyboardColors);
+  let isWin = checkGameWin(keyboardColors);
   let isLost = checkGameLost(state, totalKeyboardColors);
   // console.log('totalKeyboard', totalKeyboardColors);
   return {
