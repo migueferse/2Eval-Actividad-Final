@@ -10,7 +10,6 @@ function Error() {
       </div>
     </div>
   )
-
 }
 
 export default Error

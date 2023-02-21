@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
-const winMessage = 'Has ganado';
-const lostMessage = 'Has perdido';
+import { MESSAGES } from '../config/config';
 
 function ErrorGame() {
   const error = useSelector(state => state.game.game.error);
@@ -9,8 +8,8 @@ function ErrorGame() {
   return (
     <>
       <div className={error === "" ? "": "message"}>{error}</div>
-      <div className={win === true ? "message" : ""}>{win === true ? winMessage: ""}</div>
-      <div className={lost === true ? "message" : ""}>{lost === true ? lostMessage: ""}</div>
+      <div className={win === true ? "message" : ""}>{win === true ? MESSAGES.win: ""}</div>
+      <div className={lost === true ? "message" : ""}>{lost === true ? MESSAGES.lost: ""}</div>
     </>
   )
 }

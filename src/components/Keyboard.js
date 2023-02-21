@@ -1,61 +1,30 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { addLetter, deleteLetter } from '../features/keyboardReducer';
+import { deleteLetter } from '../features/keyboardReducer';
 import { checkWordFetch } from '../features/thunks';
 import KeyboardLetter from './KeyboardLetter';
+import { LINES } from '../config/config';
 import '../styles/keyboard.css';
 const deleteStyle = {
   'width': '20px',
   'height': '30px'
 }
 
-const line1 = ['Q','W','E','R','T','Y','U','I','O','P'];
-const line2 = ['A','S','D','F','G','H','J','K','L','Ñ'];
-const line3 = ['Z','X','C','V','B','N','M'];
-
 function Keyboard() {
   const currentLetters = useSelector(state => state.game.currentWord.letters);
   const gameId = useSelector(state => state.game.game.id);
-  console.log('Component',currentLetters);
   const dispatch = useDispatch();
 
   return (
     <div className="keyboard">
       <div className="keyboard-line">
-        {line1.map((letter, index) => <KeyboardLetter key={index} value={letter}/>)}
-        {/* <div className="key " onClick={() => dispatch(addLetter('Q'))}>Q</div>
-        <div className="key " onClick={() => dispatch(addLetter('W'))}>W</div>
-        <div className="key " onClick={() => dispatch(addLetter('E'))}>E</div>
-        <div className="key " onClick={() => dispatch(addLetter('R'))}>R</div>
-        <div className="key " onClick={() => dispatch(addLetter('T'))}>T</div>
-        <div className="key " onClick={() => dispatch(addLetter('Y'))}>Y</div>
-        <div className="key " onClick={() => dispatch(addLetter('U'))}>U</div>
-        <div className="key " onClick={() => dispatch(addLetter('I'))}>I</div>
-        <div className="key " onClick={() => dispatch(addLetter('O'))}>O</div>
-        <div className="key " onClick={() => dispatch(addLetter('P'))}>P</div> */}
+        {LINES.line1.map((letter, index) => <KeyboardLetter key={index} value={letter}/>)}       
       </div>
       <div className="keyboard-line">
-      {line2.map((letter, index) => <KeyboardLetter key={index} value={letter} position={index}/>)}
-        {/* <div className="key " onClick={() => dispatch(addLetter('A'))}>A</div>
-        <div className="key " onClick={() => dispatch(addLetter('S'))}>S</div>
-        <div className="key " onClick={() => dispatch(addLetter('D'))}>D</div>
-        <div className="key " onClick={() => dispatch(addLetter('F'))}>F</div>
-        <div className="key " onClick={() => dispatch(addLetter('G'))}>G</div>
-        <div className="key " onClick={() => dispatch(addLetter('H'))}>H</div>
-        <div className="key " onClick={() => dispatch(addLetter('J'))}>J</div>
-        <div className="key " onClick={() => dispatch(addLetter('K'))}>K</div>
-        <div className="key " onClick={() => dispatch(addLetter('L'))}>L</div>
-        <div className="key " onClick={() => dispatch(addLetter('Ñ'))}>Ñ</div> */}
+        {LINES.line2.map((letter, index) => <KeyboardLetter key={index} value={letter} position={index}/>)}        
       </div>
       <div className="keyboard-line">
         <div className="command" onClick={() => dispatch(checkWordFetch({currentLetters, gameId}))}>↵</div>
-        {line3.map((letter, index) => <KeyboardLetter key={index} value={letter} position={index}/>)}
-        {/* <div className="key " onClick={() => dispatch(addLetter('Z'))}>Z</div>
-        <div className="key " onClick={() => dispatch(addLetter('X'))}>X</div>
-        <div className="key " onClick={() => dispatch(addLetter('C'))}>C</div>
-        <div className="key " onClick={() => dispatch(addLetter('V'))}>V</div>
-        <div className="key " onClick={() => dispatch(addLetter('B'))}>B</div>
-        <div className="key " onClick={() => dispatch(addLetter('N'))}>N</div>
-        <div className="key " onClick={() => dispatch(addLetter('M'))}>M</div> */}
+          {LINES.line3.map((letter, index) => <KeyboardLetter key={index} value={letter} position={index}/>)}        
         <div className="command"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
           stroke="currentColor" aria-hidden="true" style={deleteStyle}  onClick={() => dispatch(deleteLetter())}>
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
@@ -66,5 +35,5 @@ function Keyboard() {
     </div>
   )
 }
-// {`slot ${selectedLetter === 0 ? 'selected' : null}`}
+
 export default Keyboard

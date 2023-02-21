@@ -1,4 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
+import { ERRORS } from "../config/config";
 const URL = 'https://adivina-palabra.fly.dev';
 
 async function getNewGameId() {
@@ -10,8 +11,7 @@ async function getNewGameId() {
   try {
     let response = await fetch(URLNEW,options);
     let data = await response.json();
-    if (!data.id) {throw 'Error Initializing game 404'}
-    console.log('Id partida', data.id);
+    if (!data.id) {throw ERRORS.INITIALIZE}
     return data.id;
   } catch (error) {
     throw error;
@@ -71,35 +71,25 @@ async function fetchLettersPosition(gameId, data) {
 
 async function getLettersPosition(gameData) {
   let letters = gameData.currentLetters;
-  
-  // let data = {
-  //   'position': '0',
-  //   'letter': 'a'
-  // }
-
-
   let lettersData = letters.map(function(letter, index) {
     return { position: index.toString(), letter: letter };
   });  
 
   try {
-        let lettersPosition = await Promise.all(
-          lettersData.map(async (letterData) => {return await fetchLettersPosition(gameData.gameId, letterData)})    
-        )
-        
-        return lettersPosition;    
-      } catch (error) {
-        throw error;
-      }
+    let lettersPosition = await Promise.all(
+      lettersData.map(async (letterData) => {return await fetchLettersPosition(gameData.gameId, letterData)})    
+    )
+
+    return lettersPosition;    
+  } catch (error) {
+    throw error;
+  }
 }
 
-async function checkWord(gameData) {
-  console.log('Id',gameData.gameId);
-  console.log(gameData);
-  
+async function checkWord(gameData) {  
   try {
     if (!checkWordIsFilled(gameData.currentLetters)) {
-      throw ('No hay suficientes letras');
+      throw (ERRORS.NOTFIVELETTERS);
     }
     
     let word = gameData.currentLetters.join('')    
@@ -111,14 +101,10 @@ async function checkWord(gameData) {
     let response = await fetch(URLCHECK, options);
     let data = await response.json();
     if (data.valid === false) {
-      throw ('La palabra no está en la lista');
+      throw (ERRORS.WORDNOTINLIST);
     } else {
       return getLettersPosition(gameData);
-    }
-
-
-    // return data.valid;
-    
+    } 
   } catch (error) {
     throw error
     

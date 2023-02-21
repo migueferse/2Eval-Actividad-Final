@@ -1,4 +1,3 @@
-import { useSelector } from "react-redux"
 function PreviousLetter(props) {
   const { value, color }= props;
   return (
@@ -8,7 +7,6 @@ function PreviousLetter(props) {
       </div>
     </div>
   )
-
 }
 
 export default PreviousLetter

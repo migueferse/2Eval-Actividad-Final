@@ -16,7 +16,6 @@ function Words() {
         {previousWords.length < 6 && <Word />}
       </div>
     </div>
-
   )
 }
 
