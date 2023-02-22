@@ -130,6 +130,13 @@ function getKeyboardColors(letters, colors) {
   return keyboardColors;    
 }
 
+function checkKeyboardColor(keyboardColor) {
+  let keyboardColorOut;
+  keyboardColorOut =  keyboardColor === 'green' ? 'green' : 'yellow';
+
+  return keyboardColorOut;
+}
+
 function  addlettersKeyboadColors(stateKeyboardColors, keyboardColors) {
   const mixKeyboardColors = (stateKeyboardColors, keyboardColors) => 
   Object.keys({...stateKeyboardColors, ...keyboardColors}).reduce((result, key) => {
@@ -138,7 +145,7 @@ function  addlettersKeyboadColors(stateKeyboardColors, keyboardColors) {
         result[key] = 'green';
         break;
       case 'yellow':
-        result[key] = 'yellow';
+        result[key] =checkKeyboardColor(keyboardColors[key]);
         break;
       case 'grey':
         result[key] = keyboardColors[key] || 'grey';

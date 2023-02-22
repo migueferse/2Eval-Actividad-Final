@@ -32,9 +32,8 @@ function checkWordIsFilled(letters) {
   return isWordFilled;
 }
 
-// Esta es para enviar la respuesta que quiera
 async function fetchLettersPosition(gameId, data) {
-  let URLCOLOUR = URL + '/guess/prueba/'+ 'datil';
+  let URLCOLOUR = URL + '/guess/'+ gameId;
   let options = {
     method: "POST",
     headers: {
@@ -50,28 +49,7 @@ async function fetchLettersPosition(gameId, data) {
   } catch (error) {
     handleError(error);
   }
-
 }
-// Esta es la buena descomenta cuando estés en pro
-// async function fetchLettersPosition(gameId, data) {
-//   let URLCOLOUR = URL + '/guess/'+ gameId;
-//   let options = {
-//     method: "POST",
-//     headers: {
-//       'Content-Type': 'application/json'
-//     },
-//     body: JSON.stringify(data)
-//   }
-  
-//   try {
-//     let response = await fetch(URLCOLOUR, options);
-//     let data = await response.json();
-//     return data
-//   } catch (error) {
-//     throw error;
-//   }
-
-// }
 
 async function getLettersPosition(gameData) {
   let letters = gameData.currentLetters;
