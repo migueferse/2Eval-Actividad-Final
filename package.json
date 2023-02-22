@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "webpack serve --mode=development --",
+    "winlint": "eslint",
     "eslint": "eslint ./src",
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development"
@@ -27,6 +28,7 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5"

@@ -2,6 +2,10 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { ERRORS } from "../config/config";
 const URL = 'https://adivina-palabra.fly.dev';
 
+function handleError(error) {
+  throw error;
+}
+
 async function getNewGameId() {
   var URLNEW = URL + '/new';
   var options = {
@@ -14,7 +18,7 @@ async function getNewGameId() {
     if (!data.id) {throw ERRORS.INITIALIZE}
     return data.id;
   } catch (error) {
-    throw error;
+    handleError(error);
   }
 }
 
@@ -44,7 +48,7 @@ async function fetchLettersPosition(gameId, data) {
     let data = await response.json();
     return data
   } catch (error) {
-    throw error;
+    handleError(error);
   }
 
 }
@@ -82,7 +86,7 @@ async function getLettersPosition(gameData) {
 
     return lettersPosition;    
   } catch (error) {
-    throw error;
+    handleError(error);
   }
 }
 
@@ -106,7 +110,7 @@ async function checkWord(gameData) {
       return getLettersPosition(gameData);
     } 
   } catch (error) {
-    throw error
+    handleError(error);
     
   }
 }

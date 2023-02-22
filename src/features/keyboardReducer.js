@@ -59,7 +59,7 @@ function addLetterAction(state, action) {
   let currentColors = [...state.currentWord.colors];
   currentLetters[state.currentWord.selected] = currentLetter;
 
-  if (checkWordLenght(state.currentWord.selected)) { return };
+  if (checkWordLenght(state.currentWord.selected)) { return }
   let nextSelected = nextLetterSelected(currentLetters);
 
   return {
@@ -138,7 +138,6 @@ function  addlettersKeyboadColors(stateKeyboardColors, keyboardColors) {
         result[key] = 'green';
         break;
       case 'yellow':
-        if (keyboardColors[key] === 'green') {result[key] = 'green'; break}
         result[key] = 'yellow';
         break;
       case 'grey':
